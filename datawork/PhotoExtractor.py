@@ -1,12 +1,12 @@
 """
-This module is responsible for extracting photos from 
-various fonts within the fonts-main directory 
+This module is responsible for extracting photos from
+various fonts within the fonts-main directory
 (sourced from Google Fonts)
 https://github.com/google/fonts/tree/main
 """
 
 
-# Sourcing from ofl fonts for now 
+# Sourcing from ofl fonts for now
 #   (it contains the majority of fonts)
 import os
 
@@ -22,8 +22,8 @@ from PIL import Image, ImageDraw, ImageFont
 def render_font_image(
     font_path,
     output_path,
-    image_size=(224, 224),
-    font_size=24
+    image_size=(512, 512),
+    font_size=36
 ):
     # white background
     img = Image.new("L", image_size, color=255)
@@ -60,17 +60,15 @@ def render_font_image(
 
 
 
-i=0
-
-for root, dirs, files in os.walk("datawork\\fonts-main\\ofl"):
+for root, dirs, files in os.walk("datawork/fonts-main/ofl"):
     print(root, dirs, files)
     photo_path = None
     if 'METADATA.pb' in files:
         metadata_path = os.path.join(root, 'METADATA.pb')
         with open(metadata_path, 'r', encoding='utf-8') as f:
             metadata = f.read()
-            # Filter for latin subset
-            if 'subsets: "latin"' in metadata:
+            # Filter for latin subset / not random symbols
+            if 'subsets: "latin"' in metadata and 'classifications: "SYMBOLS"' not in metadata:
                 ttf_files = [f for f in files if f.endswith('.ttf')]
 
                 # TODO: Consider filtering out Symbol fonts here as well.
@@ -85,11 +83,11 @@ for root, dirs, files in os.walk("datawork\\fonts-main\\ofl"):
                             if 'Regular' in ttf:
                                 preferred_file = ttf
                                 break
-                        
+
                         # If we don't find Regular, just use the first tff file.
                         if not preferred_file:
                             preferred_file = ttf_files[0]
-                        
+
                         photo_path = os.path.join(root, preferred_file)
 
 
@@ -101,9 +99,7 @@ for root, dirs, files in os.walk("datawork\\fonts-main\\ofl"):
                     output_path=os.path.join(
                         "datawork/font-photos",
                         os.path.basename(root) + ".png"
-                    ),
-                    image_size=(512, 512),
-                    font_size=64
+                    )
                 )
                 print("PHOTO SAVED:", photo_path)
 
