@@ -1,12 +1,11 @@
 import React from 'react';
-// import Results from './Results';
+import Results from './Results';
 
 function Center() {
   return (
-    // <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
     <div>
-      <h2>The Fontinator</h2>
-      {/* <Results /> */}
+      <h1 className='font-bold'>The Fontinator</h1>
+      <Results />
     </div>
   );
 }
