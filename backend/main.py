@@ -7,7 +7,9 @@ import numpy as np
 
 font_ids = np.load("data/FontData.npy")
 
-font_grid = np.load("data/GridCoords.npy")
+font_grid = np.load("data/GridCoords_integers.npy")
+
+featured_font = font_ids[0]  # Initialize with the first font
 
 app = FastAPI(
   title="THE FONTINATOR API",
@@ -43,3 +45,17 @@ def hello_world():
 @app.get("/api/font")
 def get_font():
   return font_ids[1]
+
+@app.post("/api/gridhover")
+def gridhover(data: dict):
+  index = data['index']
+  row = index // 35
+  col = index % 35
+  font_index = font_grid[row][col]
+  font_name = font_ids[font_index]
+  return {"font": font_name}
+
+@app.get("/api/featured-font")
+def get_featured_font():
+  return {"font": featured_font}
+

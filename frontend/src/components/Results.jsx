@@ -6,8 +6,8 @@ function Results() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/font')
-      .then(response => setFont(response.data))
+    axios.get('/api/featured-font')
+      .then(response => setFont(response.data.font))
       .catch(err => setError(err.message));
   }, []);
 

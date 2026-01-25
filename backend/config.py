@@ -5,7 +5,7 @@ from pydantic import field_validator
 class Settings(BaseSettings):
   API_PREFIX: str = "/api"
   DEBUG: bool = False
-  ALLOWED_ORIGINS: str = ""
+  ALLOWED_ORIGINS: str = "http://localhost:5173"
 
   # I don't think this is necessary but it's in the tutorial im following
   @field_validator("ALLOWED_ORIGINS")

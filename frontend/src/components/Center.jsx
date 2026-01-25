@@ -4,7 +4,7 @@ import Results from './Results';
 function Center() {
   return (
     <div>
-      <h1 className='font-bold'>The Fontinator</h1>
+      <h1 className='font-bold mt-12'>The Fontinator</h1>
       <Results />
     </div>
   );
