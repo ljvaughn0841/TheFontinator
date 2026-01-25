@@ -3,6 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 
+import numpy as np
+
+font_ids = np.load("data/FontData.npy")
+
+font_grid = np.load("data/GridCoords.npy")
+
 app = FastAPI(
   title="THE FONTINATOR API",
   description="Api to access encoded fonts.",
@@ -27,3 +33,13 @@ app.add_middleware(
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+@app.get("/hello-world")
+def hello_world():
+  # Always returns a Pydantic object or a python dictionary -> JSON
+  return{"message": "Hello World :)"}
+
+
+@app.get("/font")
+def get_font():
+  return font_ids[1]
