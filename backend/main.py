@@ -34,12 +34,12 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
-@app.get("/hello-world")
+@app.get("/api/hello-world")
 def hello_world():
   # Always returns a Pydantic object or a python dictionary -> JSON
   return{"message": "Hello World :)"}
 
 
-@app.get("/font")
+@app.get("/api/font")
 def get_font():
   return font_ids[1]
