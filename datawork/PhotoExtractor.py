@@ -15,7 +15,6 @@ import os
 # If there are multiple .ttf files in a font directory,
 #   prefer the one with "Regular" in its name
 
-import os
 from PIL import Image, ImageDraw, ImageFont
 
 
