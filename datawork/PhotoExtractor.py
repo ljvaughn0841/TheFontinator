@@ -59,7 +59,7 @@ def render_font_image(
 
 
 
-for root, dirs, files in os.walk("datawork/fonts-main/ofl"):
+for root, dirs, files in os.walk("fonts-main/ofl"):
     print(root, dirs, files)
     photo_path = None
     if 'METADATA.pb' in files:
@@ -96,7 +96,7 @@ for root, dirs, files in os.walk("datawork/fonts-main/ofl"):
                 render_font_image(
                     font_path=photo_path,
                     output_path=os.path.join(
-                        "datawork/font-photos",
+                        "font-photos",
                         os.path.basename(root) + ".png"
                     )
                 )
