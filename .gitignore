@@ -2,3 +2,7 @@ datawork/fonts-main
 datawork/font-photos
 datawork/ofl
 backend/.env
+datawork/clip_finetuned.pt
+datawork/clip_finetuned_8.pt
+datawork/clip_finetuned_hard_labels.pt
+datawork/pred_scaler.pkl

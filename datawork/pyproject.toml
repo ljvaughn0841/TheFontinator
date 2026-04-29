@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "clip",
     "ipykernel>=7.2.0",
     "matplotlib>=3.10.8",
     "pandas>=3.0.1",
@@ -19,3 +20,6 @@ dependencies = [
 dev = [
     "ipykernel>=7.2.0",
 ]
+
+[tool.uv.sources]
+clip = { git = "https://github.com/openai/CLIP.git" }
