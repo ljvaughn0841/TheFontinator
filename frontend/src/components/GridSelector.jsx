@@ -27,6 +27,8 @@ const GridSelector = () => {
     gap: '0px',
   };
 
+  const [hoveredFont, setHoveredFont] = useState(null);
+
   return (
     <div style={gridStyle}>
       {selected.map((isSelected, index) => {
@@ -40,19 +42,35 @@ const GridSelector = () => {
             key={index}
             className={`w-2.5 h-2.5 cursor-pointer ${bgClass}`}
             onClick={() => toggleCell(index)}
-            onMouseEnter={() => {
+            onMouseEnter={async () => {
               setHoveredIndex(index);
-              fetch('http://0.0.0.0:8000/api/gridhover', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ index })
-              }).catch(error => console.error('Error calling gridhover:', error));
+
+              try {
+                const res = await fetch('http://127.0.0.1:8000/api/gridhover', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ index })
+                });
+
+                const data = await res.json(); // or res.text()
+                setHoveredFont(data);
+              } catch (error) {
+                console.error('Error calling gridhover:', error);
+              }
             }}
             onMouseLeave={() => setHoveredIndex(null)}
           />
         );
 
       })}
+
+      <div style={{ marginTop: '10px' }}>
+      {hoveredFont ? (
+        <pre>{JSON.stringify(hoveredFont, null, 2)}</pre>
+      ) : (
+        <span>Hover over a cell to see font</span>
+      )}
+    </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import numpy as np
 
 font_ids = np.load("data/FontData.npy")
 
-font_grid = np.load("data/GridCoords_integers.npy")
+font_grid = np.load("data/IntGridCoords.npy")
 
 featured_font = font_ids[0]  # Initialize with the first font
 
@@ -51,8 +51,11 @@ def gridhover(data: dict):
   index = data['index']
   row = index // 35
   col = index % 35
-  font_index = font_grid[row][col]
-  font_name = font_ids[font_index]
+  target = [row, col]
+  indices = np.where((font_grid == target).all(axis=1))[0]
+
+  font_name = font_ids[indices][0]
+  print({"font": font_name})
   return {"font": font_name}
 
 @app.get("/api/featured-font")
