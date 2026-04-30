@@ -90,12 +90,12 @@ const Slider = ({ label, sliderKey, min = 0, max = 100, value, onChange, fontFil
       .x(d => xScale(d.x))
       .y0(innerH)
       .y1(d => yScale(d.y))
-      .curve(d3.curveBasis);
+      .curve(d3.curveBumpX);
 
     const line = d3.line()
       .x(d => xScale(d.x))
       .y(d => yScale(d.y))
-      .curve(d3.curveBasis);
+      .curve(d3.curveBumpX);
 
     // --- Layer 1: full distribution (background, darkest) ---
     g.append('path')

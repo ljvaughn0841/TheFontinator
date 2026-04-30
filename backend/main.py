@@ -101,6 +101,16 @@ def compute_kde(values: np.ndarray, points: int = 60) -> np.ndarray:
     x_range = np.linspace(0, 100, points)
     return x_range, kde(x_range)
 
+# Seems to work best visually with 10 bins. otherwise the values are too sparse.
+def to_histogram(values: np.ndarray, total: int, bins: int = 10) -> list[dict]:
+    """Count fonts per bin, normalize against total font count."""
+    counts, edges = np.histogram(values, bins=bins, range=(0, 100))
+    x_centers = (edges[:-1] + edges[1:]) / 2
+    y_normalized = counts / total  # proportion of ALL fonts in each bin
+
+    return [{"x": round(float(x), 2), "y": round(float(y), 6)}
+            for x, y in zip(x_centers, y_normalized)]
+
 
 @app.post("/api/distribution")
 def get_distribution(req: DistributionRequest):
@@ -108,11 +118,10 @@ def get_distribution(req: DistributionRequest):
         return []
 
     values = font_slider_scores[req.key].dropna().values
-    x_range, y_values = compute_kde(values)
-    y_normalized = y_values / y_values.max()  # peaks at 1.0
+    total = len(font_slider_scores)
 
-    return [{"x": round(float(x), 2), "y": round(float(y), 6)}
-            for x, y in zip(x_range, y_normalized)]
+    # Full dist — normalize against itself so it peaks at its natural proportion
+    return to_histogram(values, total, bins=10)
 
 
 @app.post("/api/distribution/filtered")
@@ -128,23 +137,9 @@ def get_filtered_distribution(req: FilteredDistributionRequest):
     if len(df) < 2:
         return []
 
-    full_values = font_slider_scores[req.key].dropna().values
+    total = len(font_slider_scores)  # always the full count
     filtered_values = df[req.key].dropna().values
 
-    # How many fonts survived — this becomes the height scalar
-    survival_ratio = len(filtered_values) / len(full_values)
-
-    x_range, full_y = compute_kde(full_values)
-    _, filtered_y = compute_kde(filtered_values)
-
-    full_y_max = full_y.max()
-    full_y_norm = full_y / full_y_max
-
-    # Scale filtered by survival ratio before clamping
-    # 100% of fonts survive → full height, 10% survive → 10% height
-    filtered_y_norm = (filtered_y / full_y_max) * survival_ratio
-
-    clamped_y = np.minimum(filtered_y_norm, full_y_norm)
-
-    return [{"x": round(float(x), 2), "y": round(float(y), 6)}
-            for x, y in zip(x_range, clamped_y)]
+    # Both use the same total — filtered bars are physically shorter
+    # when fewer fonts survive, impossible to exceed full distribution
+    return to_histogram(filtered_values, total, bins=10)
