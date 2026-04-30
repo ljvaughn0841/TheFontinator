@@ -8,7 +8,7 @@ from scipy.stats import gaussian_kde
 import pandas as pd
 from pydantic import BaseModel
 
-
+# TODO: Rewrite Font Data to have Caps n Spaces
 font_ids = np.load("data/FontData.npy")
 
 font_grid = np.load("data/IntGridCoords.npy")
@@ -143,3 +143,7 @@ def get_filtered_distribution(req: FilteredDistributionRequest):
     # Both use the same total — filtered bars are physically shorter
     # when fewer fonts survive, impossible to exceed full distribution
     return to_histogram(filtered_values, total, bins=10)
+
+
+    # TODO: AN API CALL FOR REQUESTING A LIST OF THE BEST MATCHING FONTS
+ 

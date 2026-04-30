@@ -52,7 +52,10 @@ const App = () => {
           fontFilters = {fontFilters}/>
         </div>
         <div>
-          <Favorites />
+          <Favorites 
+            favoritesList = {favorites}
+            toggleFavorite = {toggleFavorite}
+          />
         </div>
       </div>
     </Router>
