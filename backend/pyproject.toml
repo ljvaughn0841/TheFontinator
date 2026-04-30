@@ -7,5 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi[all]>=0.128.0",
     "numpy>=2.4.1",
+    "pandas>=3.0.2",
+    "pyarrow>=24.0.0",
     "uvicorn>=0.40.0",
 ]

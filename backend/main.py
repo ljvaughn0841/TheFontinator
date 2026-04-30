@@ -5,9 +5,13 @@ from config import settings
 
 import numpy as np
 
+import pandas as pd
+
 font_ids = np.load("data/FontData.npy")
 
 font_grid = np.load("data/IntGridCoords.npy")
+
+font_slider_scores = pd.read_parquet("data/semantic_axes.parquet")
 
 featured_font = font_ids[0]  # Initialize with the first font
 
