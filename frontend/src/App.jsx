@@ -25,8 +25,8 @@ const App = () => {
   // Shared: Center / Settings writes this, Settings uses this in graphics
   const [selectedFonts, setSelectedFonts] = useState(null);
 
-  // 
-  const [closestFonts, setClosestFonts] = useState(null);
+  // get closest fonts to slider filters
+  const [closestFonts, getClosestFonts] = useState(null);
 
   // Shared: Favorites writes this, Center needs to show heart icons
   const [favorites, setFavorites] = useState([]);

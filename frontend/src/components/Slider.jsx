@@ -61,8 +61,8 @@ const Slider = ({ label, sliderKey, min = 0, max = 100, value, onChange, fontFil
   // D3 render — runs when either distribution or value changes
   useEffect(() => {
     if (!svgRef.current || !fullDist.length) return;
-    console.log(`${sliderKey} fullDist yMax:`, d3.max(fullDist, d => d.y));
-    console.log(`${sliderKey} filteredDist yMax:`, d3.max(filteredDist, d => d.y));
+    // console.log(`${sliderKey} fullDist yMax:`, d3.max(fullDist, d => d.y));
+    // console.log(`${sliderKey} filteredDist yMax:`, d3.max(filteredDist, d => d.y));
 
     const W = svgRef.current.clientWidth || 260;
     const H = 90;

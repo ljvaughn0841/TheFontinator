@@ -6,42 +6,38 @@
 
 import { useEffect, useState } from 'react';
 
+const loadedFonts = new Set();
+
 function FontBox({ fontName, toggleFavorite }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (!fontName) return;
+useEffect(() => {
+  if (!fontName) return;
 
-    const loadFont = async () => {
-      try {
-        // Format font name for Google Fonts URL — spaces become +
-        const formatted = fontName.trim().replace(/\s+/g, '+');
-        const url = `https://fonts.googleapis.com/css2?family=${formatted}&display=swap`;
+  // Reset state when fontName changes — clears any previous error
+  setLoaded(false);
+  setError(false);
 
-        // Inject a <link> tag into the document head
-        // Check if it's already there first to avoid duplicates
-        const existingLink = document.querySelector(`link[href="${url}"]`);
-        if (existingLink) {
-          setLoaded(true);
-          return;
-        }
+  if (loadedFonts.has(fontName)) {
+    setLoaded(true);
+    return;
+  }
 
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = url;
-        link.onload = () => setLoaded(true);
-        link.onerror = () => setError(true);
-        document.head.appendChild(link);
+  const formatted = fontName.trim().replace(/\s+/g, '+');
+  const url = `https://fonts.googleapis.com/css2?family=${formatted}&display=swap`;
 
-      } catch (err) {
-        console.error(`Failed to load font: ${fontName}`, err);
-        setError(true);
-      }
-    };
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = url;
+  link.onload = () => {
+    loadedFonts.add(fontName);
+    setLoaded(true);
+  };
+  link.onerror = () => setError(true);
+  document.head.appendChild(link);
 
-    loadFont();
-  }, [fontName]); // re-runs if fontName prop changes
+}, [fontName]); // re-runs if fontName prop changes
 
   if (error) return (
     <div className="p-4 text-white/40 text-sm">

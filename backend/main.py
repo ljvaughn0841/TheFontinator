@@ -145,5 +145,39 @@ def get_filtered_distribution(req: FilteredDistributionRequest):
     return to_histogram(filtered_values, total, bins=10)
 
 
-    # TODO: AN API CALL FOR REQUESTING A LIST OF THE BEST MATCHING FONTS
- 
+# TODO: AN API CALL FOR REQUESTING A LIST OF THE BEST MATCHING FONTS
+@app.post("/api/getclosestfonts")
+def get_closest_fonts(fontFilters: dict):
+  # Get the score between the sliders
+  print(fontFilters)
+
+  midpoints = {key: (vals[0] + vals[1]) / 2 for key, vals in fontFilters["fontFilters"].items()}
+
+  print(midpoints)
+
+  active_filters = {
+      key: vals for key, vals in fontFilters["fontFilters"].items()
+      if vals != [0, 100]
+  }
+
+  # in the event of no font filters we use all filters
+  # this in theory gets us the most average looking fonts across the board
+  if not active_filters:
+      active_filters = fontFilters["fontFilters"]
+
+  cols = list(active_filters.keys())
+  target = np.array([(vals[0] + vals[1]) / 2 for vals in active_filters.values()])
+
+  # TODO: Weight based on how much the fontFilters have been restricted
+
+  distances = np.linalg.norm(font_slider_scores[cols].values - target, axis=1)
+  font_slider_scores['distance'] = distances
+
+  closest = font_slider_scores.nsmallest(10, 'distance')
+
+  # for now we'll just keep this
+
+  print(closest.font.to_dict())
+
+  # Currently font_slider_scores is just a df
+  return{ "fonts": closest.font.tolist()}

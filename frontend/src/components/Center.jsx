@@ -12,8 +12,8 @@ function Center({ fontFilters }) {
   return (
     <div>
       <h1 className='font-bold mt-12'>The Fontinator</h1>
-      <pre>{JSON.stringify(fontFilters, null, 2)}</pre>
-      <Results />
+      {/* <pre>{JSON.stringify(fontFilters, null, 2)}</pre> */}
+      <Results fontFilters = {fontFilters}/>
     </div>
   );
 }
