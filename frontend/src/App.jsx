@@ -41,22 +41,28 @@ const App = () => {
   return (
     <Router>
       <div className="grid grid-cols-4 w-screen">
-        <div>
+        <div className="bg-neutral-800 h-full">
           <Settings 
             values = {fontFilters}
             onChange={handleFilterChange}
           />
         </div>
+
         <div className="col-span-2">
           <Center 
-          fontFilters = {fontFilters}/>
+          fontFilters = {fontFilters}
+          selectedFonts = {selectedFonts}
+          setSelectedFonts = {setSelectedFonts}
+          />
         </div>
-        <div>
+
+        <div className="bg-neutral-800 h-full">
           <Favorites 
             favoritesList = {favorites}
             toggleFavorite = {toggleFavorite}
           />
         </div>
+
       </div>
     </Router>
   )
