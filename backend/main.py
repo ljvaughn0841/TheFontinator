@@ -149,36 +149,51 @@ def get_filtered_distribution(req: FilteredDistributionRequest):
 # TODO: AN API CALL FOR REQUESTING A LIST OF THE BEST MATCHING FONTS
 @app.post("/api/getclosestfonts")
 def get_closest_fonts(fontFilters: dict):
-  # Get the score between the sliders
-  print(fontFilters)
+    # Get the score between the sliders
+    print(fontFilters)
 
-  midpoints = {key: (vals[0] + vals[1]) / 2 for key, vals in fontFilters["fontFilters"].items()}
+    midpoints = {key: (vals[0] + vals[1]) / 2 for key, vals in fontFilters["fontFilters"].items()}
 
-  print(midpoints)
+    print(midpoints)
 
-  active_filters = {
-      key: vals for key, vals in fontFilters["fontFilters"].items()
-      if vals != [0, 100]
-  }
+    active_filters = {
+        key: vals for key, vals in fontFilters["fontFilters"].items()
+        if vals != [0, 100]
+    }
 
-  # in the event of no font filters we use all filters
-  # this in theory gets us the most average looking fonts across the board
-  if not active_filters:
-      active_filters = fontFilters["fontFilters"]
+    # in the event of no font filters we use all filters
+    # this in theory gets us the most average looking fonts across the board
+    if not active_filters:
+        active_filters = fontFilters["fontFilters"]
 
-  cols = list(active_filters.keys())
-  target = np.array([(vals[0] + vals[1]) / 2 for vals in active_filters.values()])
+    cols = list(active_filters.keys())
 
-  # TODO: Weight based on how much the fontFilters have been restricted
+    df_filtered = font_slider_scores.copy()
+    for col, (lo, hi) in active_filters.items():
+        if col in df_filtered.columns:
+            df_filtered = df_filtered[(df_filtered[col] >= lo) & (df_filtered[col] <= hi)]
 
-  distances = np.linalg.norm(font_slider_scores[cols].values - target, axis=1)
-  font_slider_scores['distance'] = distances
 
-  closest = font_slider_scores.nsmallest(10, 'distance')
+    # Use median of filtered fonts per axis, fall back to midpoint if no fonts survive
+    target = []
+    for col, (lo, hi) in active_filters.items():
+        if len(df_filtered) > 0 and col in df_filtered.columns:
+            target.append(df_filtered[col].median())
+        else:
+            target.append((lo + hi) / 2)  # fallback to midpoint
 
-  # for now we'll just keep this
+    #   target = np.array([(vals[0] + vals[1]) / 2 for vals in active_filters.values()])
 
-  print(closest.font.to_dict())
+    # TODO: Weight based on how much the fontFilters have been restricted
 
-  # Currently font_slider_scores is just a df
-  return{ "fonts": closest.font.tolist()}
+    distances = np.linalg.norm(font_slider_scores[cols].values - target, axis=1)
+    font_slider_scores['distance'] = distances
+
+    closest = font_slider_scores.nsmallest(10, 'distance')
+
+    # for now we'll just keep this
+
+    print(closest.font.to_dict())
+
+    # Currently font_slider_scores is just a df
+    return{ "fonts": closest.font.tolist()}
