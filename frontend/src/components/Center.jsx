@@ -8,15 +8,17 @@
 import React from 'react';
 import Results from './Results';
 
-function Center({ fontFilters, selectedFonts, setSelectedFonts }) {
+function Center({ fontFilters, selectedFonts, setSelectedFonts, favoritesList, toggleFavorite }) {
   return (
-    <div>
+    <div className='px-14'>
       <h1 className='font-bold mt-12'>The Fontinator</h1>
       {/* <pre>{JSON.stringify(fontFilters, null, 2)}</pre> */}
       <Results 
         fontFilters = {fontFilters} 
         selectedFonts = {selectedFonts}
         setSelectedFonts = {setSelectedFonts}
+        favoritesList = {favoritesList}
+        toggleFavorite = {toggleFavorite}
       />
     </div>
   );

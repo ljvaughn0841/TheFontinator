@@ -9,6 +9,7 @@ import pandas as pd
 from pydantic import BaseModel
 
 # TODO: Rewrite Font Data to have Caps n Spaces
+# TODO: Use median of data distribution within threshold instead of midpoint for distance calculation.
 font_ids = np.load("data/FontData.npy")
 
 font_grid = np.load("data/IntGridCoords.npy")

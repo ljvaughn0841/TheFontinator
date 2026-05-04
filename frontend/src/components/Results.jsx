@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import FontBox from './FontBox';
 
-function Results({ fontFilters, selectedFonts, setSelectedFonts }) {
+function Results({ fontFilters, selectedFonts, setSelectedFonts, favoritesList, toggleFavorite }) {
   const [error, setError] = useState(null);
 
 useEffect(() => {
@@ -20,7 +20,7 @@ useEffect(() => {
   return (
     <div>
     {selectedFonts.map((fontName, i) => (
-      <FontBox key={i} fontName={fontName} />
+      <FontBox key={i} fontName={fontName} toggleFavorite={toggleFavorite} favoritesList={favoritesList} toggleFavorite={toggleFavorite} />
     ))}
   </div>
   );

@@ -53,6 +53,8 @@ const App = () => {
           fontFilters = {fontFilters}
           selectedFonts = {selectedFonts}
           setSelectedFonts = {setSelectedFonts}
+          favoritesList = {favorites}
+          toggleFavorite = {toggleFavorite}
           />
         </div>
 
